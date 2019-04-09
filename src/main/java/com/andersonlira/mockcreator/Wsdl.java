@@ -12,9 +12,9 @@ public class Wsdl {
 
 	public static String post(String xml,String methodName) throws Exception{
 
-		String serviceUrl = Sys.getVariable("SERVICE_URL");
+		String serviceUrl = Sys.getVariable(Config.SERVICE_URL);
 
-		String authString = Sys.getVariable("AUTH_STRING");
+		String authString = Sys.getVariable(Config.AUTH_STRING);
 		byte[] authEncBytes = authString.getBytes();
 		String authStringEnc = new String(authEncBytes);
 

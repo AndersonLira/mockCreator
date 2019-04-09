@@ -23,16 +23,30 @@ public class MiniServer {
     private static Long delay = 0l;
     private static Config config = Config.getInstance();
     public static void main(String[] args) throws Exception {
+        if(args.length > 0){
+            if(args[0].equals("-s") || args[0].equals("--server")){
+                execute();
+            }else{
+                help();
+            }
+        }else{
+            help();
+        }
+    }
+
+    private static void execute() throws Exception {
         try{
-            delay = Long.parseLong(Sys.getVariable("RETURN_DELAY"));
+            delay = Long.parseLong(Sys.getVariable(Config.RETURN_DELAY));
 
         }catch(Exception ex){}
-        String context = Sys.getVariable("SERVER_CONTEXT");
+
+        String context = Sys.getVariable(Config.SERVER_CONTEXT);
         HttpServer server = HttpServer.create(new InetSocketAddress(8088), 0);
         server.createContext("/" + context, new MyHandler());
         server.setExecutor(null); // creates a default executor
         Logger.info("Servidor iniciado");
         server.start();
+
     }
 
     static class MyHandler implements HttpHandler {
@@ -131,5 +145,29 @@ public class MiniServer {
             String result = new String(encoded);
             return  result;
         }    
+
+    private static void help(){
+        System.out.println("-----------------------------------------------------------------------------------------");
+        System.out.println("Usage:");
+        System.out.println("");
+        System.out.println("    -s or --server execute server");
+        System.out.println("");
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("Configuration");
+        System.out.println("");
+        System.out.println("    Path");
+        System.out.println("");
+        System.out.println("        payloads folder is necessary in execution dir");
+        System.out.println("");
+        System.out.println("    Variables");
+        System.out.println("");
+        System.out.println("        SERVICE_URL   Origin service url");
+        System.out.println("        AUTH_STRING Base64 authorization encode user:password example user:1234");
+        System.out.println("        RETURN_DELAY delay of services return (when consumer has a bad behaviour)");
+        System.out.println("        SERVER_CONTEXT context of service example mockservice");
+        System.out.println("");
+        System.out.println("----------------------------------------------------------------------------------------");
+
+    }    
 
 }
