@@ -1,4 +1,4 @@
-package com.andersonlira.mockcreator;
+package com.andersonlira.mockcreator.config;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

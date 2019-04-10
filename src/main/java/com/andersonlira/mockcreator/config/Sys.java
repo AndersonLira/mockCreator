@@ -1,4 +1,4 @@
-package com.andersonlira.mockcreator;
+package com.andersonlira.mockcreator.config;
 
 public class Sys{
         public static String  getVariable(String variable) throws VariableNotDefinedException{

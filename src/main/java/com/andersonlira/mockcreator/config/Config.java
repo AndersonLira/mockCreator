@@ -1,4 +1,4 @@
-package com.andersonlira.mockcreator;
+package com.andersonlira.mockcreator.config;
 
 import java.util.Map;
 import java.util.List;

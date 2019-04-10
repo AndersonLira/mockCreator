@@ -1,4 +1,4 @@
-package com.andersonlira.mockcreator;
+package com.andersonlira.mockcreator.net;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.HttpURLConnection;
+import com.andersonlira.mockcreator.config.*;
 
 public class Wsdl {
 

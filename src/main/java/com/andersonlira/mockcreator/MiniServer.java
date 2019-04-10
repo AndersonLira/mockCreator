@@ -15,6 +15,9 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Arrays;
 
+import com.andersonlira.mockcreator.config.*;
+import com.andersonlira.mockcreator.net.*;
+
 public class MiniServer {
 
     private static final String DIR = "payloads/";
