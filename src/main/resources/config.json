@@ -2,16 +2,19 @@
 	"returnDelay":777,
 	"clearCache":{
 		"createDelegation": [
-			"getUser",
-			"getDelegationGroupSummary"
+			"getDelegationGroupsSummary",
+			"getDelegationGroupSummary",
+			"getDelegatedItemsFromDelegationGroup"
 		],
 		"removeDelegation": [
 			"getDelegationGroupsSummary",
-			"getDelegationGroupSummary"
+			"getDelegationGroupSummary",
+			"getDelegatedItemsFromDelegationGroup"
 		],
 		"updateDelegation": [
 			"getDelegationGroupsSummary",
-			"getDelegationGroupSummary"
+			"getDelegationGroupSummary",
+			"getDelegatedItemsFromDelegationGroup"
 		]
 	}
 	,
@@ -24,6 +27,8 @@
 			"selectPorfolioItem"
 	],
 	"staticReturn": {
-		"getTopUpSummary2086948126": "payloads/test.xml"		
+		"soapMethodNameBodyKey": "payloads/specific_request_response.xml",
+		"soapMethodName": "payloads/genreic_request_response.xml"
+
 	}
 }
