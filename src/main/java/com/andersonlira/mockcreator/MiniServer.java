@@ -98,6 +98,10 @@ public class MiniServer {
             if(cached == null) {
                 cached = "";
                 try{
+                    String staticFile = config.getStaticReturn(key,methodName);
+                    if(staticFile != null) {
+                        filename = staticFile;
+                    }
                     cached = readFile(filename);
                     Logger.info("Read from file");
                     CACHE.put(key,cached);

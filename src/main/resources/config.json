@@ -1,20 +1,19 @@
 {
 	"returnDelay":777,
-	"clearCache":
-		{
-			"createDelegation": [
-				"getUser",
-				"getDelegationGroupSummary"
-			],
-			"removeDelegation": [
-				"getDelegationGroupsSummary",
-				"getDelegationGroupSummary"
-			],
-			"updateDelegation": [
-				"getDelegationGroupsSummary",
-				"getDelegationGroupSummary"
-			]
-		}
+	"clearCache":{
+		"createDelegation": [
+			"getUser",
+			"getDelegationGroupSummary"
+		],
+		"removeDelegation": [
+			"getDelegationGroupsSummary",
+			"getDelegationGroupSummary"
+		],
+		"updateDelegation": [
+			"getDelegationGroupsSummary",
+			"getDelegationGroupSummary"
+		]
+	}
 	,
 	"cacheEvict":[
 		"createDelegation",
@@ -24,7 +23,7 @@
 	"delayMethods":[
 			"selectPorfolioItem"
 	],
-	"staticReturn":{
-		
+	"staticReturn": {
+		"getTopUpSummary2086948126": "payloads/test.xml"		
 	}
 }

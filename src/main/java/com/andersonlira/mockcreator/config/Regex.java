@@ -35,10 +35,10 @@ public class Regex {
    public static String  getBody( String xml ) {
       // String to be scanned to find the pattern.
       String line = xml;
-      String pattern = "<S:Body>(.*)</S:Body>";
+      String pattern = "Body>(.*)</.*Body>";
 
       // Create a Pattern object
-      Pattern r = Pattern.compile(pattern);
+      Pattern r = Pattern.compile(pattern,Pattern.DOTALL | Pattern.MULTILINE);
 
       // Now create matcher object.
       Matcher m = r.matcher(line);

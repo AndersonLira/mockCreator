@@ -78,6 +78,19 @@ public class Config {
                         return new ArrayList<String>();
                 }
 
-        }        
+        }   
+        
+        public String getStaticReturn(String key,String methodName){
+                try{
+                        Map<String,String> map = (Map<String,String>) configuration.get("staticReturn");
+                        String result = map.get(methodName);
+                        if(result == null){
+                                result = map.get(key);
+                        }
+                        return result;
+                }catch(Exception ex){
+                        return null;
+                }
+        }
 
 }
