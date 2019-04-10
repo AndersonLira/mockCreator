@@ -24,15 +24,16 @@ public class MiniServer {
     private static final String EXT = ".xml";
     private static final Map<String,String> CACHE = new HashMap<>();
     private static Config config = Config.getInstance();
+    
     public static void main(String[] args) throws Exception {
         if(args.length > 0){
             if(args[0].equals("-s") || args[0].equals("--server")){
                 execute();
             }else{
-                help();
+                Help.show();
             }
         }else{
-            help();
+            Help.show();
         }
     }
 
@@ -144,27 +145,5 @@ public class MiniServer {
             return  result;
         }    
 
-    private static void help(){
-        System.out.println("-----------------------------------------------------------------------------------------");
-        System.out.println("Usage:");
-        System.out.println("");
-        System.out.println("    -s or --server execute server");
-        System.out.println("");
-        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        System.out.println("Configuration");
-        System.out.println("");
-        System.out.println("    Path");
-        System.out.println("");
-        System.out.println("        payloads folder is necessary in execution dir");
-        System.out.println("");
-        System.out.println("    Variables");
-        System.out.println("");
-        System.out.println("        SERVICE_URL   Origin service url");
-        System.out.println("        AUTH_STRING Base64 authorization encode user:password example user:1234");
-        System.out.println("        SERVER_CONTEXT context of service example mockservice");
-        System.out.println("");
-        System.out.println("----------------------------------------------------------------------------------------");
-
-    }    
 
 }

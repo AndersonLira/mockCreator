@@ -1,7 +1,20 @@
 {
 	"returnDelay":777,
 	"clearCache":[
-			{"createDelegation": ["getDelegations"]}
+			{
+				"createDelegation": [
+					"getDelegationGroupsSummary",
+					"getDelegationGroupSummary"
+				],
+				"removeDelegation": [
+					"getDelegationGroupsSummary",
+					"getDelegationGroupSummary"
+				],
+				"updateDelegation": [
+					"getDelegationGroupsSummary",
+					"getDelegationGroupSummary"
+				]
+			}
 	],
 	"cacheEvict":[
 
