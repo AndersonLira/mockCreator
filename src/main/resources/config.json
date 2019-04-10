@@ -1,0 +1,11 @@
+{
+	"clearCache":[
+			{"createDelegation": ["getDelegations"]}
+	],
+	"cacheEvict":[
+
+	],
+	"delayMethods":[
+			"selectPorfolioItem"
+	]
+}

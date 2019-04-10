@@ -91,7 +91,7 @@ public class MiniServer {
 
         
 
-        if(Arrays.stream(config.getCacheEvict()).anyMatch(methodName::equals)){
+        if(config.getCacheEvict().stream().anyMatch(methodName::equals)){
             cached = readFromServer(request,methodName,key);
         }else{
             if(cached == null) {
@@ -109,7 +109,7 @@ public class MiniServer {
             br.close();
             isr.close();
             try{
-                if(Arrays.stream(config.getDelayMethods()).anyMatch(methodName::equals)){
+                if(config.getDelayMethods().stream().anyMatch(methodName::equals)){
                     Logger.colorInfo(methodName + " sleeping " + delay,Logger.ANSI_GREEN);
                     Thread.sleep(delay);
                 }

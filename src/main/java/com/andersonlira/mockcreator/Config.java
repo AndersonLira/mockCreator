@@ -1,5 +1,12 @@
 package com.andersonlira.mockcreator;
 
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.io.InputStream;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+
 //TODO this class should read from configuration file and not
 public class Config {
 
@@ -13,8 +20,10 @@ public class Config {
         private String[] cacheEvict = {}; //{"getUser","selectPorfolioItem","setSelectedPortfolioItem"};
         private String[] delayMethods = {"selectPorfolioItem"};
 
-        private Config(){
+        private Map<String,Object> configuration;
 
+        private Config(){
+                this.initializeConfig();
         }
 
         public static Config getInstance(){
@@ -26,12 +35,30 @@ public class Config {
                 }
         }
 
-        public String[] getCacheEvict(){
-                return this.cacheEvict;
+        private void initializeConfig(){
+                ObjectMapper mapper = new ObjectMapper();
+                try{
+                        InputStream in = getClass().getResourceAsStream("/config.json"); 
+                        configuration = mapper.readValue(in,new TypeReference<Map<String, Object>>() {});
+                }catch(Exception ex){
+                        ex.printStackTrace();
+                }
         }
 
-        public String[] getDelayMethods(){
-                return this.delayMethods;
+        public List<String> getCacheEvict(){
+                try{
+                        return ((List<String>) configuration.get("cacheEvict"));
+                }catch(Exception ex){
+                        return new ArrayList<String>();
+                }
+        }
+
+        public List<String> getDelayMethods(){
+                try{
+                        return ((List<String>) configuration.get("delayMethods"));
+                }catch(Exception ex){
+                        return new ArrayList<String>();
+                }
         }
 
 }
