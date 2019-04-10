@@ -1,25 +1,30 @@
 {
 	"returnDelay":777,
-	"clearCache":[
-			{
-				"createDelegation": [
-					"getDelegationGroupsSummary",
-					"getDelegationGroupSummary"
-				],
-				"removeDelegation": [
-					"getDelegationGroupsSummary",
-					"getDelegationGroupSummary"
-				],
-				"updateDelegation": [
-					"getDelegationGroupsSummary",
-					"getDelegationGroupSummary"
-				]
-			}
-	],
+	"clearCache":
+		{
+			"createDelegation": [
+				"getUser",
+				"getDelegationGroupSummary"
+			],
+			"removeDelegation": [
+				"getDelegationGroupsSummary",
+				"getDelegationGroupSummary"
+			],
+			"updateDelegation": [
+				"getDelegationGroupsSummary",
+				"getDelegationGroupSummary"
+			]
+		}
+	,
 	"cacheEvict":[
-
+		"createDelegation",
+		"removeDelegation",
+		"updateDelegation"
 	],
 	"delayMethods":[
 			"selectPorfolioItem"
-	]
+	],
+	"staticReturn":{
+		
+	}
 }

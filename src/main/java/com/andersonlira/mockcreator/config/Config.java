@@ -69,4 +69,15 @@ public class Config {
                 }
         }
 
+        public List<String> getClearCache(String methodName){
+                try{
+                        Map<String,List<String>> map = (Map<String,List<String>>) configuration.get("clearCache");
+                        List<String> list = map.get(methodName);
+                        return list != null ? list : new ArrayList<String>();
+                }catch(Exception ex){
+                        return new ArrayList<String>();
+                }
+
+        }        
+
 }

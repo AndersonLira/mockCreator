@@ -12,7 +12,9 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Arrays;
 
 import com.andersonlira.mockcreator.config.*;
@@ -22,8 +24,9 @@ public class MiniServer {
 
     private static final String DIR = "payloads/";
     private static final String EXT = ".xml";
-    private static final Map<String,String> CACHE = new HashMap<>();
+    private static final ConcurrentMap<String,String> CACHE = new ConcurrentHashMap<>();
     private static Config config = Config.getInstance();
+
     
     public static void main(String[] args) throws Exception {
         if(args.length > 0){
@@ -85,9 +88,8 @@ public class MiniServer {
 
         String filename = DIR + key + EXT;
         Logger.info("Lookin for: " + filename);
-
+        
         String cached = CACHE.get(key);
-
         
 
         if(config.getCacheEvict().stream().anyMatch(methodName::equals)){
@@ -109,12 +111,13 @@ public class MiniServer {
             isr.close();
             try{
                 if(config.getDelayMethods().stream().anyMatch(methodName::equals)){
-                    Logger.colorInfo(methodName + " sleeping " + config.getReturnDelay(),Logger.ANSI_GREEN);
+                    Logger.info(methodName + " sleeping " + config.getReturnDelay(),Logger.ANSI_GREEN);
                     Thread.sleep(config.getReturnDelay());
                 }
             }catch(Exception ie){        
             }        
         }
+        cacheManager(methodName);
         return cached;
     }
 
@@ -123,7 +126,7 @@ public class MiniServer {
         try{
             response = Wsdl.post(request,methodName);
             CACHE.put(key,response);
-            Logger.colorInfo("Read from server " + methodName,Logger.ANSI_YELLOW);
+            Logger.info("Read from server " + methodName,Logger.ANSI_YELLOW);
             try (PrintWriter out = new PrintWriter(DIR + key + EXT)) {
                 out.println(response);
             }
@@ -143,7 +146,35 @@ public class MiniServer {
             byte[] encoded = Files.readAllBytes(Paths.get(path));
             String result = new String(encoded);
             return  result;
-        }    
+        }  
+
+    private  static void removeFile(String path)  {
+        try{
+            File file = new File(path);
+            file.delete();
+        }catch(Exception ioEx){
+            ioEx.printStackTrace();
+        }
+    }
+    
+    private static void cacheManager(String methodName){
+        //TODO implement java 8 stream feature
+        try{
+            for (String method : config.getClearCache(methodName)){
+                for (Map.Entry<String, String> entry :  CACHE.entrySet()) {
+                    if(entry.getKey().startsWith(method)){
+                        Logger.info("Removing cache " + entry.getKey(),Logger.ANSI_BLUE);
+                        CACHE.remove(entry.getKey() );
+                        String fileName =DIR + entry.getKey() + EXT;
+                        Logger.info("Removing file " + fileName,Logger.ANSI_BLUE);
+                        removeFile(fileName);
+                    }
+                }
+            }
+        }catch(Exception unexpectedException){
+            unexpectedException.printStackTrace();
+        }
+    }        
 
 
 }

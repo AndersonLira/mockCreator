@@ -28,7 +28,7 @@ public class Logger {
         public static void info(Object message){
                 System.out.println(new Date() + " - " + message);
         }
-        public static void colorInfo(Object message,String color){
+        public static void info(Object message,String color){
                 System.out.print(color);
                 Logger.info(message);
                 System.out.print(ANSI_RESET);
