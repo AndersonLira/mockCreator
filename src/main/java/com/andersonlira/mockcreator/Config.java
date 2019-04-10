@@ -12,7 +12,6 @@ public class Config {
 
         public static String SERVICE_URL = "SERVICE_URL";
         public static String AUTH_STRING = "AUTH_STRING";
-        public static String RETURN_DELAY = "RETURN_DELAY";
         public static String SERVER_CONTEXT = "SERVER_CONTEXT";
 
         private static Config INSTANCE;
@@ -58,6 +57,15 @@ public class Config {
                         return ((List<String>) configuration.get("delayMethods"));
                 }catch(Exception ex){
                         return new ArrayList<String>();
+                }
+        }
+
+        public Long getReturnDelay(){
+                try{
+                        return ((Integer) configuration.get("returnDelay")).longValue();
+                }catch(Exception ex){
+                        ex.printStackTrace();
+                        return 0l;
                 }
         }
 

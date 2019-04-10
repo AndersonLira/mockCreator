@@ -1,4 +1,5 @@
 {
+	"returnDelay":777,
 	"clearCache":[
 			{"createDelegation": ["getDelegations"]}
 	],

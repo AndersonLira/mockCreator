@@ -20,7 +20,6 @@ public class MiniServer {
     private static final String DIR = "payloads/";
     private static final String EXT = ".xml";
     private static final Map<String,String> CACHE = new HashMap<>();
-    private static Long delay = 0l;
     private static Config config = Config.getInstance();
     public static void main(String[] args) throws Exception {
         if(args.length > 0){
@@ -35,10 +34,6 @@ public class MiniServer {
     }
 
     private static void execute() throws Exception {
-        try{
-            delay = Long.parseLong(Sys.getVariable(Config.RETURN_DELAY));
-
-        }catch(Exception ex){}
 
         String context = Sys.getVariable(Config.SERVER_CONTEXT);
         HttpServer server = HttpServer.create(new InetSocketAddress(8088), 0);
@@ -110,8 +105,8 @@ public class MiniServer {
             isr.close();
             try{
                 if(config.getDelayMethods().stream().anyMatch(methodName::equals)){
-                    Logger.colorInfo(methodName + " sleeping " + delay,Logger.ANSI_GREEN);
-                    Thread.sleep(delay);
+                    Logger.colorInfo(methodName + " sleeping " + config.getReturnDelay(),Logger.ANSI_GREEN);
+                    Thread.sleep(config.getReturnDelay());
                 }
             }catch(Exception ie){        
             }        
@@ -163,7 +158,6 @@ public class MiniServer {
         System.out.println("");
         System.out.println("        SERVICE_URL   Origin service url");
         System.out.println("        AUTH_STRING Base64 authorization encode user:password example user:1234");
-        System.out.println("        RETURN_DELAY delay of services return (when consumer has a bad behaviour)");
         System.out.println("        SERVER_CONTEXT context of service example mockservice");
         System.out.println("");
         System.out.println("----------------------------------------------------------------------------------------");
