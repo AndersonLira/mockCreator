@@ -4,24 +4,28 @@
 		"createDelegation": [
 			"getDelegationGroupsSummary",
 			"getDelegationGroupSummary",
-			"getDelegatedItemsFromDelegationGroup"
+			"getDelegatedItemsFromDelegationGroup",
+			"existDelegation"
 		],
 		"removeDelegation": [
 			"getDelegationGroupsSummary",
 			"getDelegationGroupSummary",
-			"getDelegatedItemsFromDelegationGroup"
+			"getDelegatedItemsFromDelegationGroup",
+			"existDelegation"
 		],
-		"updateDelegation": [
+		"updateDelegationGroup": [
 			"getDelegationGroupsSummary",
 			"getDelegationGroupSummary",
-			"getDelegatedItemsFromDelegationGroup"
+			"getDelegatedItemsFromDelegationGroup",
+			"existDelegation"
 		]
 	}
 	,
 	"cacheEvict":[
 		"createDelegation",
 		"removeDelegation",
-		"updateDelegation"
+		"updateDelegationGroup",
+		"updateDelegatedItemsFromDelegationGroup"
 	],
 	"delayMethods":[
 			"selectPorfolioItem"
