@@ -93,4 +93,12 @@ public class Config {
                 }
         }
 
+        public Boolean showErrorServer(){
+                try{
+                        return (Boolean) configuration.get("showErrorServer");
+                }catch(Exception ex){
+                        return false;
+                }       
+        }
+
 }

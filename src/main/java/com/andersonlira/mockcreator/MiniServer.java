@@ -134,13 +134,19 @@ public class MiniServer {
             try (PrintWriter out = new PrintWriter(DIR + key + EXT)) {
                 out.println(response);
             }
-        }catch(Exception ex){
-            if(ex instanceof VariableNotDefinedException){
-                ex.printStackTrace();
-                System.exit(1);
-            }else{
-                ex.printStackTrace();
+        }catch(VariableNotDefinedException ex){
+            ex.printStackTrace();
+            System.exit(1);
+        }catch(ServerFaultException ex){
+            if(config.showErrorServer()){
+                Logger.error("Soap In");
+                Logger.info(ex.getInXml(),Logger.ANSI_PURPLE);
+                Logger.error("Soap Out");
+                Logger.info(ex.getOutXml(),Logger.ANSI_PURPLE);
             }
+        }catch(Exception ex){
+            Logger.error(request);
+            ex.printStackTrace();
         }
         return response;        
     }

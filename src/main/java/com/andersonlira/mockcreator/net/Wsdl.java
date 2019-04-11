@@ -28,10 +28,13 @@ public class Wsdl {
 		urlConnection.setRequestProperty("SOAPAction", serviceUrl +"#"+methodName);
 		urlConnection.getOutputStream().write(xml.getBytes("UTF-8"));
 
-		if(urlConnection.getResponseCode() != 200){
-			throw new Exception("Server Fault");
+		InputStream is;
+
+		try{
+			is = urlConnection.getInputStream();
+		}catch(IOException ex){
+			is = urlConnection.getErrorStream();
 		}
-		InputStream is = urlConnection.getInputStream();
 		InputStreamReader isr = new InputStreamReader(is);
 
 		int numCharsRead;
@@ -41,6 +44,13 @@ public class Wsdl {
 			sb.append(charArray, 0, numCharsRead);
 		}
 		String result = sb.toString();
+
+		if(urlConnection.getResponseCode() != 200){
+			ServerFaultException ex = new ServerFaultException();
+			ex.setInXml(xml);
+			ex.setOutXml(result);
+			throw ex;
+		}
 
 		return result;
 	}

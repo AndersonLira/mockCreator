@@ -1,5 +1,6 @@
 {
 	"returnDelay":777,
+	"showErrorServer": true,
 	"clearCache":{
 		"createDelegation": [
 			"getDelegationGroupsSummary",

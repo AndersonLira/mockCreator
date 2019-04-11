@@ -34,5 +34,9 @@ public class Logger {
                 System.out.print(ANSI_RESET);
         }
 
+        public static void error(Object message){
+                info(message,ANSI_RED);
+        }
+
 
 }
