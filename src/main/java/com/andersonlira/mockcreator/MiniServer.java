@@ -92,7 +92,8 @@ public class MiniServer {
         String cached = CACHE.get(key);
         
 
-        if(config.getCacheEvict().stream().anyMatch(methodName::equals)){
+        //If working as proxy or method is in cache evict list all calls will be on origin server
+        if(config.workingAsProxy() || config.getCacheEvict().stream().anyMatch(methodName::equals)){
             cached = readFromServer(request,methodName,key);
         }else{
             if(cached == null) {

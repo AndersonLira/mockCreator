@@ -101,4 +101,14 @@ public class Config {
                 }       
         }
 
+        public Boolean workingAsProxy(){
+                try{
+                        return (Boolean) configuration.get("workingAsProxy");
+                }catch(Exception ex){
+                        return false;
+                }       
+        }
+
+
+
 }
