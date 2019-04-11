@@ -54,14 +54,18 @@ public class MiniServer {
     static class MyHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange t) throws IOException {
-
-            Logger.info("Request");
-            String id = new Date().toString();
-            String response = writeRequest(t);
-            t.sendResponseHeaders(200, response.length());
-            OutputStream os = t.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
+            try{
+                Logger.info("Request");
+                String id = new Date().toString();
+                String response = writeRequest(t);
+                t.sendResponseHeaders(200, response.length());
+                OutputStream os = t.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
+            }catch(Exception ex){
+                ex.printStackTrace();
+                throw ex;
+            }
         }
     }
 

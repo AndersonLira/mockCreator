@@ -4,7 +4,7 @@
 			"selectPorfolioItem"
 	],
 	"showErrorServer": true,
-	" .": false,
+	"workingAsProxy": false,
 	"clearCache":{
 		"createDelegation": [
 			"getDelegationGroupsSummary",
@@ -24,8 +24,7 @@
 			"getDelegatedItemsFromDelegationGroup",
 			"existDelegation"
 		]
-	}
-	,
+	},
 	"cacheEvict":[
 		"createDelegation",
 		"removeDelegation",
