@@ -1,7 +1,10 @@
 {
 	"returnDelay":777,
+	"delayMethods":[
+			"selectPorfolioItem"
+	],
 	"showErrorServer": true,
-	"workingAsProxy": false,
+	" .": false,
 	"clearCache":{
 		"createDelegation": [
 			"getDelegationGroupsSummary",
@@ -29,12 +32,9 @@
 		"updateDelegationGroup",
 		"updateDelegatedItemsFromDelegationGroup"
 	],
-	"delayMethods":[
-			"selectPorfolioItem"
-	],
 	"staticReturn": {
 		"soapMethodNameBodyKey": "payloads/specific_request_response.xml",
-		"soapMethodName": "payloads/genreic_request_response.xml"
+		"soapMethodName": "payloads/generic_request_response.xml"
 
 	}
 }
