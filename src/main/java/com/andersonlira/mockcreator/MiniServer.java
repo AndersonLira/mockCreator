@@ -149,6 +149,7 @@ public class MiniServer {
                 Logger.error("Soap Out");
                 Logger.info(ex.getOutXml(),Logger.ANSI_PURPLE);
             }
+            response = ex.getOutXml();
         }catch(Exception ex){
             Logger.error(request);
             ex.printStackTrace();
