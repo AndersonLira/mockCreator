@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.InputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -36,8 +38,18 @@ public class Config {
 
         private void initializeConfig(){
                 ObjectMapper mapper = new ObjectMapper();
+                String configurationFile = null;
+                InputStream in = null;
                 try{
-                        InputStream in = getClass().getResourceAsStream("/config.json"); 
+                        configurationFile = Sys.getVariable("MC_CONF_FILE");
+                        File file = new File(configurationFile);
+                        in = new FileInputStream(file);
+                }catch(Exception ex){
+                        configurationFile = "/config.json";
+                        in =  getClass().getResourceAsStream(configurationFile);
+                }
+
+                try{
                         configuration = mapper.readValue(in,new TypeReference<Map<String, Object>>() {});
                 }catch(Exception ex){
                         ex.printStackTrace();

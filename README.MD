@@ -15,6 +15,7 @@ Some variables should be defined on your environment.
   - SERVICE_URL= origin url service
   - AUTH_STRING= Base64 authorization encode user:password example user:1234
   - SERVER_CONTEXT = context of service example mockservice
+  - MC_CONF_FILE (optional) = alternative configuration file
 
 You also need to create a folder named **payloads** where executable jar is. Remember that folder target will be clean and the best approach is copy executable jar to other place.
 
