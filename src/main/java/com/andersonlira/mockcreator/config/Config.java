@@ -15,6 +15,7 @@ public class Config {
         public static String SERVICE_URL = "SERVICE_URL";
         public static String AUTH_STRING = "AUTH_STRING";
         public static String SERVER_CONTEXT = "SERVER_CONTEXT";
+        private final Integer DEFAULT_PORT = 8088;
 
         private static Config INSTANCE;
 
@@ -121,6 +122,14 @@ public class Config {
                 }       
         }
 
+        public Integer getPort(){
+                try{
+                        Integer port = (Integer) configuration.get("port");
+                        return port == null ? DEFAULT_PORT : port;
+                }catch(Exception ex){
+                        return DEFAULT_PORT;
+                }       
+        }
 
 
 }

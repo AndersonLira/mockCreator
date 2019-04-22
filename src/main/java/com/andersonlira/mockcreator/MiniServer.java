@@ -43,10 +43,10 @@ public class MiniServer {
     private static void execute() throws Exception {
 
         String context = Sys.getVariable(Config.SERVER_CONTEXT);
-        HttpServer server = HttpServer.create(new InetSocketAddress(8088), 0);
+        HttpServer server = HttpServer.create(new InetSocketAddress(config.getPort()), 0);
         server.createContext("/" + context, new MyHandler());
         server.setExecutor(null); // creates a default executor
-        Logger.info("Servidor iniciado");
+        Logger.info("Server started on port " + config.getPort());
         server.start();
 
     }
