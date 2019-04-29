@@ -12,9 +12,7 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import java.util.Date;
 import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.Arrays;
 
 import com.andersonlira.mockcreator.config.*;
@@ -24,7 +22,7 @@ public class MiniServer {
 
     private static final String DIR = "payloads/";
     private static final String EXT = ".xml";
-    private static final ConcurrentMap<String,String> CACHE = new ConcurrentHashMap<>();
+    private static final Map<String,String> CACHE = new HashMap<>();
     private static Config config = Config.getInstance();
 
     
