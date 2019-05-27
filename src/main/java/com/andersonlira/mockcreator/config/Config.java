@@ -121,6 +121,15 @@ public class Config {
                         return false;
                 }       
         }
+        public Boolean hasMemoryCache(){
+                try{
+                        Boolean hasMemoryCache =  (Boolean) configuration.get("hasMemoryCache");
+                        return hasMemoryCache == null ? true : hasMemoryCache;
+                }catch(Exception ex){
+                        return true;
+                }       
+        }
+
 
         public Integer getPort(){
                 try{

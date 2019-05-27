@@ -98,7 +98,7 @@ public class MiniServer {
         if(config.workingAsProxy() || config.getCacheEvict().stream().anyMatch(methodName::equals)){
             cached = readFromServer(request,methodName,key);
         }else{
-            if(cached == null) {
+            if(cached == null || !config.hasMemoryCache()) {
                 cached = "";
                 try{
                     String staticFile = config.getStaticReturn(key,methodName);

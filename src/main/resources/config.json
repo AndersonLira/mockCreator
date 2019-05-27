@@ -36,5 +36,6 @@
 		"soapMethodName": "payloads/generic_request_response.xml"
 
 	},
-	"port": 8088
+	"port": 8088,
+	"hasMemoryCache": true
 }
