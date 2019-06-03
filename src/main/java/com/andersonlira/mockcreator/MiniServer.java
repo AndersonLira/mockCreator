@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Arrays;
 
 import com.andersonlira.mockcreator.cache.FileCacheExecutor;
+import com.andersonlira.mockcreator.cache.MemoryCacheExecutor;
 import com.andersonlira.mockcreator.chain.Executor;
 import com.andersonlira.mockcreator.config.*;
 import com.andersonlira.mockcreator.net.*;
@@ -53,9 +54,9 @@ public class MiniServer {
     }
 
     private static void prepareExecutor(){
-
-        executor = new FileCacheExecutor();
-        executor.setNext(new WsdlExecutor());
+        Executor fileExecutor = new FileCacheExecutor();
+        fileExecutor.setNext(new WsdlExecutor());
+        executor = MemoryCacheExecutor.create(fileExecutor);
 
     }
 
@@ -63,7 +64,6 @@ public class MiniServer {
         @Override
         public void handle(HttpExchange t) throws IOException {
             try{
-                Logger.info("Request");
                 String id = new Date().toString();
                 String response = writeRequest(t);
                 t.sendResponseHeaders(200, response.length());
@@ -98,7 +98,7 @@ public class MiniServer {
             try{
                 return executor.get(request);
             }catch(Exception ex){
-
+                return ex.getMessage();
             }
         }
 

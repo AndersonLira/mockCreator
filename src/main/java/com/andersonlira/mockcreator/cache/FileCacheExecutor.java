@@ -33,7 +33,7 @@ public class FileCacheExecutor implements Executor{
             return fromFile;
         }catch(IOException ex){}
         
-        String content = next.get(xml);
+        String content = this.next.get(xml);
         try (PrintWriter out = new PrintWriter(filename)) {
             out.println(content);
         }
