@@ -14,7 +14,7 @@ public class MemoryCacheExecutor implements Executor{
         this.executor = executor;
     }
 
-    public String get(String xml){
+    public String get(String xml) throws Exception{
         return null;
     }
 

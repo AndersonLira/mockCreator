@@ -15,8 +15,11 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Arrays;
 
+import com.andersonlira.mockcreator.cache.FileCacheExecutor;
+import com.andersonlira.mockcreator.chain.Executor;
 import com.andersonlira.mockcreator.config.*;
 import com.andersonlira.mockcreator.net.*;
+import com.andersonlira.mockcreator.log.*;
 
 public class MiniServer {
 
@@ -24,7 +27,7 @@ public class MiniServer {
     private static final String EXT = ".xml";
     private static final Map<String,String> CACHE = new HashMap<>();
     private static Config config = Config.getInstance();
-
+    private static Executor executor;
     
     public static void main(String[] args) throws Exception {
         if(args.length > 0){
@@ -39,13 +42,20 @@ public class MiniServer {
     }
 
     private static void execute() throws Exception {
-
+        prepareExecutor();
         String context = Sys.getVariable(Config.SERVER_CONTEXT);
         HttpServer server = HttpServer.create(new InetSocketAddress(config.getPort()), 0);
         server.createContext("/" + context, new MyHandler());
         server.setExecutor(null); // creates a default executor
         Logger.info("Server started on port " + config.getPort());
         server.start();
+
+    }
+
+    private static void prepareExecutor(){
+
+        executor = new FileCacheExecutor();
+        executor.setNext(new WsdlExecutor());
 
     }
 
@@ -84,6 +94,13 @@ public class MiniServer {
         
         String request = buf.toString();
         String methodName = XmlHelper.getMethodName(request);
+        if(executor != null) {
+            try{
+                return executor.get(request);
+            }catch(Exception ex){
+
+            }
+        }
 
         String body = XmlHelper.getBody(request);
         String key = methodName + body.hashCode();

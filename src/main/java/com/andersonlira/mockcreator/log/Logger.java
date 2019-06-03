@@ -1,4 +1,4 @@
-package com.andersonlira.mockcreator;
+package com.andersonlira.mockcreator.log;
 
 
 import java.util.Date;
