@@ -1,7 +1,5 @@
 package com.andersonlira.mockcreator;
 
-
-
 import java.io.IOException;
 import java.io.*;
 import java.nio.file.*;
@@ -26,18 +24,18 @@ public class MiniServer {
 
     private static final String DIR = "payloads/";
     private static final String EXT = ".xml";
-    private static final Map<String,String> CACHE = new HashMap<>();
+    private static final Map<String, String> CACHE = new HashMap<>();
     private static Config config = Config.getInstance();
     private static Executor executor;
-    
+
     public static void main(String[] args) throws Exception {
-        if(args.length > 0){
-            if(args[0].equals("-s") || args[0].equals("--server")){
+        if (args.length > 0) {
+            if (args[0].equals("-s") || args[0].equals("--server")) {
                 execute();
-            }else{
+            } else {
                 Help.show();
             }
-        }else{
+        } else {
             Help.show();
         }
     }
@@ -53,51 +51,54 @@ public class MiniServer {
 
     }
 
-    private static void prepareExecutor(){
-        Executor fileExecutor = new FileCacheExecutor();
-        fileExecutor.setNext(new WsdlExecutor());
-        executor = MemoryCacheExecutor.create(fileExecutor);
+    private static void prepareExecutor() {
+        WsdlExecutor wsdlExecutor = new WsdlExecutor();
+        if(config.workingAsProxy()){
+            executor = wsdlExecutor;
+        }else{
+            Executor fileExecutor = new FileCacheExecutor();
+            fileExecutor.setNext(wsdlExecutor);
+            executor = MemoryCacheExecutor.create(fileExecutor);
+        }
 
     }
 
     static class MyHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange t) throws IOException {
-            try{
+            try {
                 String id = new Date().toString();
                 String response = writeRequest(t);
                 t.sendResponseHeaders(200, response.length());
                 OutputStream os = t.getResponseBody();
                 os.write(response.getBytes());
                 os.close();
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 ex.printStackTrace();
                 throw ex;
             }
         }
     }
 
-
-
-    public static String writeRequest(HttpExchange t) throws IOException{
-        InputStreamReader isr =  new InputStreamReader(t.getRequestBody(),"utf-8");
+    public static String writeRequest(HttpExchange t) throws IOException {
+        InputStreamReader isr = new InputStreamReader(t.getRequestBody(), "utf-8");
         BufferedReader br = new BufferedReader(isr);
-        
+
         // From now on, the right way of moving from bytes to utf-8 characters:
-        
+
         int b;
         StringBuilder buf = new StringBuilder(512);
         while ((b = br.read()) != -1) {
             buf.append((char) b);
         }
-        
-        
+
         String request = buf.toString();
         String methodName = XmlHelper.getMethodName(request);
-        if(executor != null) {
-            try{
+        sleepIfNecessary(methodName);
+        if (executor != null) {
+            try {
                 return executor.get(request);
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 return ex.getMessage();
             }
         }
@@ -107,42 +108,52 @@ public class MiniServer {
 
         String filename = DIR + key + EXT;
         Logger.info("Lookin for: " + filename);
-        
-        String cached = CACHE.get(key);
-        
 
-        //If working as proxy or method is in cache evict list all calls will be on origin server
-        if(config.workingAsProxy() || config.getCacheEvict().stream().anyMatch(methodName::equals)){
-            cached = readFromServer(request,methodName,key);
-        }else{
-            if(cached == null || !config.hasMemoryCache()) {
+        String cached = CACHE.get(key);
+
+        // If working as proxy or method is in cache evict list all calls will be on
+        // origin server
+        if (config.workingAsProxy() || config.getCacheEvict().stream().anyMatch(methodName::equals)) {
+            cached = readFromServer(request, methodName, key);
+        } else {
+            if (cached == null || !config.hasMemoryCache()) {
                 cached = "";
-                try{
-                    String staticFile = config.getStaticReturn(key,methodName);
-                    if(staticFile != null) {
+                try {
+                    String staticFile = config.getStaticReturn(key, methodName);
+                    if (staticFile != null) {
                         filename = staticFile;
                     }
                     cached = readFile(filename);
                     Logger.info("Read from file");
-                    CACHE.put(key,cached);
-                }catch(Exception e){
-                    cached = readFromServer(request,methodName,key);
+                    CACHE.put(key, cached);
+                } catch (Exception e) {
+                    cached = readFromServer(request, methodName, key);
                 }
-            }else{
+            } else {
                 Logger.info("Read from cache");
             }
             br.close();
             isr.close();
-            try{
-                if(config.getDelayMethods().stream().anyMatch(methodName::equals)){
-                    Logger.info(methodName + " sleeping " + config.getReturnDelay(),Logger.ANSI_GREEN);
+            try {
+                if (config.getDelayMethods().stream().anyMatch(methodName::equals)) {
+                    Logger.info(methodName + " sleeping " + config.getReturnDelay(), Logger.ANSI_GREEN);
                     Thread.sleep(config.getReturnDelay());
                 }
-            }catch(Exception ie){        
-            }        
+            } catch (Exception ie) {
+            }
         }
         cacheManager(methodName);
         return cached;
+    }
+
+    private static void sleepIfNecessary(String methodName) {
+        if (config.getDelayMethods().stream().anyMatch(methodName::equals)) {
+            Logger.info(methodName + " sleeping " + config.getReturnDelay(), Logger.ANSI_GREEN);
+            try {
+                Thread.sleep(config.getReturnDelay());
+            } catch (InterruptedException e) {}
+        }        
+
     }
 
     private static  String readFromServer(String request,String methodName,String key){

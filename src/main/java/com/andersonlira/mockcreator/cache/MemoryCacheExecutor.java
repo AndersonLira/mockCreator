@@ -43,8 +43,6 @@ public class MemoryCacheExecutor implements Executor{
         }
         String content = this.next.get(xml);
         CACHE.put(key,content);
-
-
         return content;
     }
 
