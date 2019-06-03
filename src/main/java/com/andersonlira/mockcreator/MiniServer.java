@@ -27,6 +27,7 @@ public class MiniServer {
     private static final Map<String, String> CACHE = new HashMap<>();
     private static Config config = Config.getInstance();
     private static Executor executor;
+    private static Executor proxyExecutor;
 
     public static void main(String[] args) throws Exception {
         if (args.length > 0) {
@@ -52,14 +53,10 @@ public class MiniServer {
     }
 
     private static void prepareExecutor() {
-        WsdlExecutor wsdlExecutor = new WsdlExecutor();
-        if(config.workingAsProxy()){
-            executor = wsdlExecutor;
-        }else{
-            Executor fileExecutor = new FileCacheExecutor();
-            fileExecutor.setNext(wsdlExecutor);
-            executor = MemoryCacheExecutor.create(fileExecutor);
-        }
+        proxyExecutor = new WsdlExecutor();
+        Executor fileExecutor = new FileCacheExecutor();
+        fileExecutor.setNext(proxyExecutor);
+        executor = MemoryCacheExecutor.create(fileExecutor);
 
     }
 
@@ -95,9 +92,10 @@ public class MiniServer {
         String request = buf.toString();
         String methodName = XmlHelper.getMethodName(request);
         sleepIfNecessary(methodName);
+        Executor threadExecutor = config.workingAsProxy() || config.getCacheEvict().stream().anyMatch(methodName::equals) ? proxyExecutor : executor;
         if (executor != null) {
             try {
-                return executor.get(request);
+                return threadExecutor.get(request);
             } catch (Exception ex) {
                 return ex.getMessage();
             }

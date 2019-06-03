@@ -9,6 +9,7 @@ import java.net.URL;
 import com.andersonlira.mockcreator.chain.Executor;
 import com.andersonlira.mockcreator.config.Config;
 import com.andersonlira.mockcreator.config.Sys;
+import com.andersonlira.mockcreator.config.VariableNotDefinedException;
 import com.andersonlira.mockcreator.log.*;
 
 public class WsdlExecutor implements Executor {
@@ -72,8 +73,12 @@ public class WsdlExecutor implements Executor {
 		try{
 			String result = WsdlExecutor.post(xml, methodName);
 			return result;
+		}catch(VariableNotDefinedException ve){
+			throw ve;
+		}catch(ServerFaultException se){
+			throw new Exception(se.getOutXml());		
 		}catch(Exception ex){
-			throw new Exception(((ServerFaultException)ex).getOutXml());
+			throw ex;
 		}
 	}
 
