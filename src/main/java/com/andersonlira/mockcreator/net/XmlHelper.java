@@ -1,9 +1,10 @@
-package com.andersonlira.mockcreator.config;
+package com.andersonlira.mockcreator.net;
+
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Regex {
+public class XmlHelper {
    public static String  getMethodName( String xml ) {
       // String to be scanned to find the pattern.
       String line = xml;

@@ -83,9 +83,9 @@ public class MiniServer {
         
         
         String request = buf.toString();
-        String methodName = Regex.getMethodName(request);
+        String methodName = XmlHelper.getMethodName(request);
 
-        String body = Regex.getBody(request);
+        String body = XmlHelper.getBody(request);
         String key = methodName + body.hashCode();
 
         String filename = DIR + key + EXT;
