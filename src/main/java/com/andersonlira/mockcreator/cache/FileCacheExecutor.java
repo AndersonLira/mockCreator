@@ -2,7 +2,7 @@ package com.andersonlira.mockcreator.cache;
 
 import com.andersonlira.mockcreator.chain.Executor;
 import com.andersonlira.mockcreator.config.*;
-import com.andersonlira.mockcreator.log.Logger;
+import com.andersonlira.mockcreator.log.*;
 import com.andersonlira.mockcreator.net.XmlHelper;
 
 import java.io.File;
@@ -54,7 +54,7 @@ public class FileCacheExecutor implements Executor, CacheManager{
                 try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(
                     Paths.get(DIR), method + "*" + EXT)) {
                     dirStream.forEach(path -> {
-                        Logger.info("Removing file: " + path,Logger.ANSI_BLUE);
+                        Logger.info("Removing file: " + path,Color.ANSI_BLUE);
                         removeFile(path.toString());
                     });
                 }

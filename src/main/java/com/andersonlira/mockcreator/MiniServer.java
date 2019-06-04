@@ -115,7 +115,7 @@ public class MiniServer {
 
     private static void sleepIfNecessary(String methodName) {
         if (config.getDelayMethods().stream().anyMatch(methodName::equals)) {
-            Logger.info(methodName + " sleeping " + config.getReturnDelay(), Logger.ANSI_GREEN);
+            Logger.info(methodName + " sleeping " + config.getReturnDelay(), Color.ANSI_GREEN);
             try {
                 Thread.sleep(config.getReturnDelay());
             } catch (InterruptedException e) {}

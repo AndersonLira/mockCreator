@@ -2,7 +2,7 @@ package com.andersonlira.mockcreator.cache;
 
 import com.andersonlira.mockcreator.chain.Executor;
 import com.andersonlira.mockcreator.config.*;
-import com.andersonlira.mockcreator.log.Logger;
+import com.andersonlira.mockcreator.log.*;
 import com.andersonlira.mockcreator.net.XmlHelper;
 
 import java.util.concurrent.*;
@@ -59,7 +59,7 @@ public class MemoryCacheExecutor implements Executor,CacheManager{
             for (String method : config.getClearCache(methodName)){
                 for (ConcurrentMap.Entry<String, String> entry :  CACHE.entrySet()) {
                     if(entry.getKey().startsWith(method)){
-                        Logger.info("Removing cache " + entry.getKey(),Logger.ANSI_BLUE);
+                        Logger.info("Removing cache " + entry.getKey(),Color.ANSI_BLUE);
                         CACHE.remove(entry.getKey() );
                     }
                 }

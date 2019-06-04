@@ -69,7 +69,7 @@ public class WsdlExecutor implements Executor {
 	@Override
 	public String get(String xml) throws Exception {
 		String methodName = XmlHelper.getMethodName(xml);
-		Logger.info("Read from server: " + methodName, Logger.ANSI_YELLOW);
+		Logger.info("Read from server: " + methodName, Color.ANSI_YELLOW);
 		try{
 			String result = WsdlExecutor.post(xml, methodName);
 			return result;
@@ -78,9 +78,9 @@ public class WsdlExecutor implements Executor {
 		}catch(ServerFaultException se){
             if(config.showErrorServer()){
                 Logger.error("Soap In");
-                Logger.info(se.getInXml(),Logger.ANSI_PURPLE);
+                Logger.info(se.getInXml(),Color.ANSI_PURPLE);
                 Logger.error("Soap Out");
-                Logger.info(se.getOutXml(),Logger.ANSI_PURPLE);
+                Logger.info(se.getOutXml(),Color.ANSI_PURPLE);
             }
 			throw new Exception(se.getOutXml());		
 		}catch(Exception ex){
