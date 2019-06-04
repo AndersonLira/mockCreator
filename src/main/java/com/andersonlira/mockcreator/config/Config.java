@@ -1,6 +1,7 @@
 package com.andersonlira.mockcreator.config;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.InputStream;
@@ -9,7 +10,6 @@ import java.io.FileInputStream;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 
-//TODO this class should read from configuration file and not
 public class Config {
 
         public static String SERVICE_URL = "SERVICE_URL";
@@ -18,10 +18,6 @@ public class Config {
         private final Integer DEFAULT_PORT = 8088;
 
         private static Config INSTANCE;
-
-        private String[] cacheEvict = {}; //{"getUser","selectPorfolioItem","setSelectedPortfolioItem"};
-        private String[] delayMethods = {"selectPorfolioItem"};
-
         private Map<String,Object> configuration;
 
         private Config(){
@@ -54,6 +50,12 @@ public class Config {
                         configuration = mapper.readValue(in,new TypeReference<Map<String, Object>>() {});
                 }catch(Exception ex){
                         ex.printStackTrace();
+                }finally{
+                        if(Objects.nonNull(in)){
+                                try{
+                                        in.close();
+                                }catch(Exception eClose){}
+                        }
                 }
         }
 
