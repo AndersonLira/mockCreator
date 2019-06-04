@@ -35,6 +35,10 @@ public class FileCacheExecutor implements Executor, CacheManager{
         String key = methodName + body.hashCode();
         String filename = DIR + key + EXT;
         try{
+            String staticFile = config.getStaticReturn(key,methodName);
+            if(staticFile != null) {
+                filename = staticFile;
+            }
             String fromFile = readFile(filename);
             Logger.info("Read from file: "+ filename);
             return fromFile;
