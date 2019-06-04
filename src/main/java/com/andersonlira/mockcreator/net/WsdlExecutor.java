@@ -13,7 +13,7 @@ import com.andersonlira.mockcreator.config.VariableNotDefinedException;
 import com.andersonlira.mockcreator.log.*;
 
 public class WsdlExecutor implements Executor {
-
+	private Config config = Config.getInstance();
 	private Executor next;
 
 	public static String post(String xml,String methodName) throws Exception{
@@ -76,6 +76,12 @@ public class WsdlExecutor implements Executor {
 		}catch(VariableNotDefinedException ve){
 			throw ve;
 		}catch(ServerFaultException se){
+            if(config.showErrorServer()){
+                Logger.error("Soap In");
+                Logger.info(se.getInXml(),Logger.ANSI_PURPLE);
+                Logger.error("Soap Out");
+                Logger.info(se.getOutXml(),Logger.ANSI_PURPLE);
+            }
 			throw new Exception(se.getOutXml());		
 		}catch(Exception ex){
 			throw ex;
