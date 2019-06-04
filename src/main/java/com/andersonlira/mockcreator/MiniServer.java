@@ -108,49 +108,9 @@ public class MiniServer {
             } catch (Exception ex) {
                 return ex.getMessage();
             }
+        }else{
+            throw new RuntimeException("Server is not configured.");
         }
-
-        String body = XmlHelper.getBody(request);
-        String key = methodName + body.hashCode();
-
-        String filename = DIR + key + EXT;
-        Logger.info("Lookin for: " + filename);
-
-        String cached = CACHE.get(key);
-
-        // If working as proxy or method is in cache evict list all calls will be on
-        // origin server
-        if (config.workingAsProxy() || config.getCacheEvict().stream().anyMatch(methodName::equals)) {
-            cached = readFromServer(request, methodName, key);
-        } else {
-            if (cached == null || !config.hasMemoryCache()) {
-                cached = "";
-                try {
-                    String staticFile = config.getStaticReturn(key, methodName);
-                    if (staticFile != null) {
-                        filename = staticFile;
-                    }
-                    cached = readFile(filename);
-                    Logger.info("Read from file");
-                    CACHE.put(key, cached);
-                } catch (Exception e) {
-                    cached = readFromServer(request, methodName, key);
-                }
-            } else {
-                Logger.info("Read from cache");
-            }
-            br.close();
-            isr.close();
-            try {
-                if (config.getDelayMethods().stream().anyMatch(methodName::equals)) {
-                    Logger.info(methodName + " sleeping " + config.getReturnDelay(), Logger.ANSI_GREEN);
-                    Thread.sleep(config.getReturnDelay());
-                }
-            } catch (Exception ie) {
-            }
-        }
-        cacheManager(methodName);
-        return cached;
     }
 
     private static void sleepIfNecessary(String methodName) {
@@ -162,68 +122,4 @@ public class MiniServer {
         }        
 
     }
-
-    private static  String readFromServer(String request,String methodName,String key){
-        String response = "";
-        try{
-            response = Wsdl.post(request,methodName);
-            CACHE.put(key,response);
-            Logger.info("Read from server " + methodName,Logger.ANSI_YELLOW);
-            try (PrintWriter out = new PrintWriter(DIR + key + EXT)) {
-                out.println(response);
-            }
-        }catch(VariableNotDefinedException ex){
-            ex.printStackTrace();
-            System.exit(1);
-        }catch(ServerFaultException ex){
-            if(config.showErrorServer()){
-                Logger.error("Soap In");
-                Logger.info(ex.getInXml(),Logger.ANSI_PURPLE);
-                Logger.error("Soap Out");
-                Logger.info(ex.getOutXml(),Logger.ANSI_PURPLE);
-            }
-            response = ex.getOutXml();
-        }catch(Exception ex){
-            Logger.error(request);
-            ex.printStackTrace();
-        }
-        return response;        
-    }
-
-    static String readFile(String path)  throws IOException 
-        {
-            byte[] encoded = Files.readAllBytes(Paths.get(path));
-            String result = new String(encoded);
-            return  result;
-        }  
-
-    private  static void removeFile(String path)  {
-        try{
-            File file = new File(path);
-            file.delete();
-        }catch(Exception ioEx){
-            ioEx.printStackTrace();
-        }
-    }
-    
-    private static void cacheManager(String methodName){
-        //TODO implement java 8 stream feature
-        try{
-            for (String method : config.getClearCache(methodName)){
-                for (Map.Entry<String, String> entry :  CACHE.entrySet()) {
-                    if(entry.getKey().startsWith(method)){
-                        Logger.info("Removing cache " + entry.getKey(),Logger.ANSI_BLUE);
-                        CACHE.remove(entry.getKey() );
-                        String fileName =DIR + entry.getKey() + EXT;
-                        Logger.info("Removing file " + fileName,Logger.ANSI_BLUE);
-                        removeFile(fileName);
-                    }
-                }
-            }
-        }catch(Exception unexpectedException){
-            unexpectedException.printStackTrace();
-        }
-    }        
-
-
 }

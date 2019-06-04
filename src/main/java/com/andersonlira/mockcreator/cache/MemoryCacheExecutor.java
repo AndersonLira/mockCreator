@@ -47,7 +47,9 @@ public class MemoryCacheExecutor implements Executor,CacheManager{
             return cached;
         }
         String content = this.next.get(xml);
-        CACHE.put(key,content);
+        if(config.hasMemoryCache()){
+            CACHE.put(key,content);
+        }
         return content;
     }
 
