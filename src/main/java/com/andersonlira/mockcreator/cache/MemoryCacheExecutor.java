@@ -5,12 +5,12 @@ import com.andersonlira.mockcreator.config.*;
 import com.andersonlira.mockcreator.log.Logger;
 import com.andersonlira.mockcreator.net.XmlHelper;
 
-import java.util.*;
+import java.util.concurrent.*;
 
-public class MemoryCacheExecutor implements Executor{
+public class MemoryCacheExecutor implements Executor,CacheManager{
     private Executor next;
     private static Config config = Config.getInstance();
-    private static final Map<String,String> CACHE = new HashMap<>();
+    private static final ConcurrentMap<String,String> CACHE = new ConcurrentHashMap<>();
 
 
     private MemoryCacheExecutor(){
@@ -33,6 +33,11 @@ public class MemoryCacheExecutor implements Executor{
 
     public String get(String xml) throws Exception{
         String methodName = XmlHelper.getMethodName(xml);
+        String result = getFromCache(xml, methodName);
+        return result;
+    }
+
+    private String getFromCache(String xml,String methodName) throws Exception{
         String body = XmlHelper.getBody(xml);
         String key = methodName + body.hashCode();
         
@@ -46,5 +51,19 @@ public class MemoryCacheExecutor implements Executor{
         return content;
     }
 
-
+    @Override
+    public void manageCache(String methodName){
+        try{
+            for (String method : config.getClearCache(methodName)){
+                for (ConcurrentMap.Entry<String, String> entry :  CACHE.entrySet()) {
+                    if(entry.getKey().startsWith(method)){
+                        Logger.info("Removing cache " + entry.getKey(),Logger.ANSI_BLUE);
+                        CACHE.remove(entry.getKey() );
+                    }
+                }
+            }
+        }catch(Exception unexpectedException){
+            unexpectedException.printStackTrace();
+        }        
+    }
 }

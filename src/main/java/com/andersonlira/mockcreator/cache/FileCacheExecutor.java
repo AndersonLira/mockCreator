@@ -3,7 +3,6 @@ package com.andersonlira.mockcreator.cache;
 import com.andersonlira.mockcreator.chain.Executor;
 import com.andersonlira.mockcreator.config.*;
 import com.andersonlira.mockcreator.log.Logger;
-import com.andersonlira.mockcreator.net.Wsdl;
 import com.andersonlira.mockcreator.net.XmlHelper;
 
 import java.io.File;
@@ -13,9 +12,8 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
 
-public class FileCacheExecutor implements Executor{
+public class FileCacheExecutor implements Executor, CacheManager{
     private static final String DIR = "payloads/";
     private static final String EXT = ".xml";
     private Executor next;
@@ -29,7 +27,6 @@ public class FileCacheExecutor implements Executor{
     public String get(String xml) throws Exception{
         String methodName = XmlHelper.getMethodName(xml);
         String result = getFromFile(xml,methodName);
-        manageFiles(methodName);
         return result;
     }
 
@@ -50,12 +47,16 @@ public class FileCacheExecutor implements Executor{
         return content;
     }
 
-    private void manageFiles(String methodName) {
+    @Override
+    public void manageCache(String methodName) {
         try{
             for (String method : config.getClearCache(methodName)){
                 try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(
                     Paths.get(DIR), method + "*" + EXT)) {
-                    dirStream.forEach(path -> removeFile(path.toString()));
+                    dirStream.forEach(path -> {
+                        Logger.info("Removing file: " + path,Logger.ANSI_BLUE);
+                        removeFile(path.toString());
+                    });
                 }
             }
         }catch(Exception unexpectedException){

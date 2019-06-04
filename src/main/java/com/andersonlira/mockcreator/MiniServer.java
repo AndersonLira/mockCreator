@@ -11,8 +11,11 @@ import com.sun.net.httpserver.HttpServer;
 import java.util.Date;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.andersonlira.mockcreator.cache.CacheManager;
 import com.andersonlira.mockcreator.cache.FileCacheExecutor;
 import com.andersonlira.mockcreator.cache.MemoryCacheExecutor;
 import com.andersonlira.mockcreator.chain.Executor;
@@ -28,6 +31,7 @@ public class MiniServer {
     private static Config config = Config.getInstance();
     private static Executor executor;
     private static Executor proxyExecutor;
+    private static List<CacheManager> caches = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
         if (args.length > 0) {
@@ -56,7 +60,10 @@ public class MiniServer {
         proxyExecutor = new WsdlExecutor();
         Executor fileExecutor = new FileCacheExecutor();
         fileExecutor.setNext(proxyExecutor);
-        executor = MemoryCacheExecutor.create(fileExecutor);
+        Executor memoryExecutor = MemoryCacheExecutor.create(fileExecutor);
+        executor = memoryExecutor;
+        caches.add((CacheManager)memoryExecutor);
+        caches.add((CacheManager)fileExecutor);
 
     }
 
@@ -95,7 +102,9 @@ public class MiniServer {
         Executor threadExecutor = config.workingAsProxy() || config.getCacheEvict().stream().anyMatch(methodName::equals) ? proxyExecutor : executor;
         if (executor != null) {
             try {
-                return threadExecutor.get(request);
+                String result = threadExecutor.get(request);
+                caches.stream().forEach(c -> c.manageCache(methodName));
+                return result;
             } catch (Exception ex) {
                 return ex.getMessage();
             }
