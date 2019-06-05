@@ -37,5 +37,7 @@
 
 	},
 	"port": 8088,
-	"hasMemoryCache": true
+	"hasMemoryCache": true,
+	"logRequestBody": false,
+	"logResponseBody": false
 }

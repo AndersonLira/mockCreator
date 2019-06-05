@@ -75,6 +75,8 @@ public class MiniServer {
                 String response = writeRequest(t);
                 t.sendResponseHeaders(200, response.length());
                 OutputStream os = t.getResponseBody();
+
+
                 os.write(response.getBytes());
                 os.close();
             } catch (Exception ex) {
@@ -97,14 +99,16 @@ public class MiniServer {
         }
 
         String request = buf.toString();
+
         String methodName = XmlHelper.getMethodName(request);
         sleepIfNecessary(methodName);
         Executor threadExecutor = config.workingAsProxy() || config.getCacheEvict().stream().anyMatch(methodName::equals) ? proxyExecutor : executor;
         if (executor != null) {
             try {
-                String result = threadExecutor.get(request);
+                String response = threadExecutor.get(request);
                 caches.stream().forEach(c -> c.manageCache(methodName));
-                return result;
+                logIfNecessary(request,response,methodName);
+                return response;
             } catch (Exception ex) {
                 return ex.getMessage();
             }
@@ -120,6 +124,21 @@ public class MiniServer {
                 Thread.sleep(config.getReturnDelay());
             } catch (InterruptedException e) {}
         }        
+
+    }
+
+    private static void logIfNecessary(String request,String response,String methodName){
+        if(config.logRequestBody()){
+            Logger.info("REQUEST BODY " + methodName,Color.ANSI_BLUE_BACKGROUND);
+            Logger.info(request);
+            Logger.info("REQUEST BODY",Color.ANSI_BLUE_BACKGROUND);
+        }
+
+        if(config.logResponseBody()){
+            Logger.info("RESPONSE BODY " + methodName,Color.ANSI_BLUE_BACKGROUND);
+            Logger.info(response);
+            Logger.info("RESPONSE BODY",Color.ANSI_BLUE_BACKGROUND);
+        }
 
     }
 }

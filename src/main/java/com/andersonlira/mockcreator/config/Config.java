@@ -142,5 +142,22 @@ public class Config {
                 }       
         }
 
+        public Boolean logRequestBody(){
+                try{
+                        Boolean logRequestBody =  (Boolean) configuration.get("logRequestBody");
+                        return logRequestBody == null ? false : logRequestBody;
+                }catch(Exception ex){
+                        return false;
+                }       
+        }
+
+        public Boolean logResponseBody(){
+                try{
+                        Boolean logResponseBody =  (Boolean) configuration.get("logResponseBody");
+                        return logResponseBody == null ? false : logResponseBody;
+                }catch(Exception ex){
+                        return false;
+                }       
+        }
 
 }
