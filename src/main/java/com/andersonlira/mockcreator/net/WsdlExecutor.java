@@ -84,6 +84,7 @@ public class WsdlExecutor implements Executor {
             }
 			throw new Exception(se.getOutXml());		
 		}catch(Exception ex){
+			Logger.error("Server error: " + ex.getMessage());
 			throw ex;
 		}
 	}
