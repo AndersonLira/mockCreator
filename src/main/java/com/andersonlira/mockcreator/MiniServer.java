@@ -73,7 +73,7 @@ public class MiniServer {
             try {
                 String id = new Date().toString();
                 String response = writeRequest(t);
-                t.sendResponseHeaders(200, response.length());
+                t.sendResponseHeaders(200, response.getBytes().length);
                 OutputStream os = t.getResponseBody();
 
 
