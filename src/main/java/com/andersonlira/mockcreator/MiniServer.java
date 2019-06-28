@@ -64,7 +64,6 @@ public class MiniServer {
         executor = memoryExecutor;
         caches.add((CacheManager)memoryExecutor);
         caches.add((CacheManager)fileExecutor);
-
     }
 
     static class MyHandler implements HttpHandler {
@@ -102,7 +101,7 @@ public class MiniServer {
 
         String methodName = XmlHelper.getMethodName(request);
         sleepIfNecessary(methodName);
-        Executor threadExecutor = config.workingAsProxy() || config.getCacheEvict().stream().anyMatch(methodName::equals) ? proxyExecutor : executor;
+        Executor threadExecutor = getThreadExecutor(request);
         if (executor != null) {
             try {
                 String response = threadExecutor.get(request);
@@ -115,6 +114,19 @@ public class MiniServer {
         }else{
             throw new RuntimeException("Server is not configured.");
         }
+    }
+
+    private static Executor getThreadExecutor(String xml){
+        String methodName = XmlHelper.getMethodName(xml);
+        
+        if(config.workingAsProxy() || 
+           config.getCacheEvict().stream().anyMatch(methodName::equals) ||
+           (config.isRegexValidation() && !config.isRegexInList(xml))
+         ){
+            return proxyExecutor;
+        }
+
+        return executor;
     }
 
     private static void sleepIfNecessary(String methodName) {

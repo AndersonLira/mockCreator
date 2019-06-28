@@ -39,5 +39,9 @@
 	"port": 8088,
 	"hasMemoryCache": true,
 	"logRequestBody": false,
-	"logResponseBody": false
+	"logResponseBody": false,
+	"isRegexValidation": true,
+	"regexList":[
+		"192.168.1.240"
+	]
 }

@@ -29,6 +29,10 @@ The file of configurations is packaged in the jar (config.json). Each key change
 - **cacheEvict** methods that should not be cached. These requests will be always in origin server.
 - **staticReturn** methods that should have these returns statics. Here is configured the file of return.
 - **hasMemoryCache** (v 1.1) application memory cache config. If it is false memory cache will be ignored. Default **true**.
+- **logRequestBody** (v 1.4) log all requests body. Default **false**.
+- **logResponseBody** (v 1.4) log all responses body. Default **false**.
+- **isRegexValidation** (v 1.4) Use mocks only if regex is present in regexList. Default **false**.
+- **regexList** (v 1.4) List of regex that will be checked . 
 
 It is possible edit file directaly in jar file, but server should not be executing.
 

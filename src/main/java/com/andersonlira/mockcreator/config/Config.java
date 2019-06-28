@@ -160,4 +160,31 @@ public class Config {
                 }       
         }
 
+
+        public Boolean isRegexValidation(){
+                try{
+                        Boolean isRegexValidation =  (Boolean) configuration.get("isRegexValidation");
+                        return isRegexValidation == null ? false : isRegexValidation;
+                }catch(Exception ex){
+                        return false;
+                }       
+        }
+
+        public Boolean isRegexInList(String xml){
+                try{
+                        List<String> list = ((List<String>) configuration.get("regexList"));
+                        if(Objects.nonNull(list)){
+                                for(String s:list){
+                                        if(xml.contains(s)){
+                                                return true;
+                                        }
+                                }
+                        }
+                        return false;
+                }catch(Exception ex){
+                        return false;
+                }
+        }
+
+
 }
