@@ -37,3 +37,9 @@ The file of configurations is packaged in the jar (config.json). Each key change
 It is possible edit file directaly in jar file, but server should not be executing.
 
 **For help, execute jar file without parameters**
+
+## Releases notes
+### 1.4 
+- Regex implementation. If it is setted to true, only request bodys with given request will use mocks.
+### 1.5
+- Watcher configuration file.
