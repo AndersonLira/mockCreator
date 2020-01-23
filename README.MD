@@ -33,6 +33,7 @@ The file of configurations is packaged in the jar (config.json). Each key change
 - **logResponseBody** (v 1.4) log all responses body. Default **false**.
 - **isRegexValidation** (v 1.4) Use mocks only if regex is present in regexList. Default **false**.
 - **regexList** (v 1.4) List of regex that will be checked . 
+- **manipulationData** (v 1.6) Data that must be changed. A key value list with replaces. 
 
 It is possible edit file directaly in jar file, but server should not be executing.
 
@@ -43,3 +44,5 @@ It is possible edit file directaly in jar file, but server should not be executi
 - Regex implementation. If it is setted to true, only request bodys with given request will use mocks.
 ### 1.5
 - Watcher configuration file.
+### 1.6
+- Data manipulation support added.
