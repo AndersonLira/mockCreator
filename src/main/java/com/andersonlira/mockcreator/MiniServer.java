@@ -75,7 +75,6 @@ public class MiniServer {
                 t.sendResponseHeaders(200, response.getBytes().length);
                 OutputStream os = t.getResponseBody();
 
-
                 os.write(response.getBytes());
                 os.close();
             } catch (Exception ex) {
@@ -106,7 +105,9 @@ public class MiniServer {
             try {
                 String response = threadExecutor.get(request);
                 caches.stream().forEach(c -> c.manageCache(methodName));
+                response = manipulateData(response);
                 logIfNecessary(request,response,methodName);
+
                 return response;
             } catch (Exception ex) {
                 return ex.getMessage();
@@ -152,5 +153,14 @@ public class MiniServer {
             Logger.info("RESPONSE BODY",Color.ANSI_BLUE_BACKGROUND);
         }
 
+    }
+
+    private static String manipulateData(String s){
+        Map<String,String> map = config.getManipulationData();
+        if(null == map) return s;
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            s = s.replaceAll(entry.getKey(), entry.getValue());
+        }        
+        return s;
     }
 }

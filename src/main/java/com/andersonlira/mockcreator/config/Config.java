@@ -222,6 +222,14 @@ public class Config {
                         return false;
                 }
         }
+        public Map<String,String> getManipulationData() {
+                try {
+                        Map<String, String> map = (Map<String, String>) configuration.get("manipulationData");
+                        return map;
+                } catch (Exception ex) {
+                        return null;
+                }
+        }
 
         protected class WatchFiles implements Runnable {
                 protected Config config;

@@ -36,11 +36,14 @@
 		"soapMethodName": "payloads/generic_request_response.xml"
 
 	},
+	"manipulationData":{
+		"originData":"finalData"
+	},
 	"port": 8088,
 	"hasMemoryCache": true,
 	"logRequestBody": false,
 	"logResponseBody": false,
-	"isRegexValidation": true,
+	"isRegexValidation": false,
 	"regexList":[
 		"192.168.1.240"
 	]
