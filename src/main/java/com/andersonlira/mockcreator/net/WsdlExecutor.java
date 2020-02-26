@@ -69,7 +69,9 @@ public class WsdlExecutor implements Executor {
 	@Override
 	public String get(String xml) throws Exception {
 		String methodName = XmlHelper.getMethodName(xml);
-		Logger.info("Read from server: " + methodName, Color.ANSI_YELLOW);
+		String body = XmlHelper.getBody(xml);
+        String key = methodName + body.hashCode();
+		Logger.info("Read from server: " + key, Color.ANSI_YELLOW);
 		try{
 			String result = WsdlExecutor.post(xml, methodName);
 			return result;
